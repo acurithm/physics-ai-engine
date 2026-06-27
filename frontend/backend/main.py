@@ -22,6 +22,8 @@ app.add_middleware(
 # OpenAI Client Setup - Ab ye .env ya environment variables se key uthayega
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+
+
 class Query(BaseModel):
     question: str
 
