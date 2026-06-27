@@ -1,0 +1,16 @@
+{
+  "physics": {
+    "kinematics": {
+      "projectile_motion": {
+        "formula": "H = (u^2 * sin^2(theta)) / (2 * g)",
+        "source": "HC Verma Vol-1, Page 45",
+        "concept": "The trajectory of a projectile is a parabola."
+      },
+      "equations_of_motion": {
+        "formula": "v = u + at, s = ut + 0.5at^2, v^2 = u^2 + 2as",
+        "source": "NCERT Physics Class 11, Chapter 3",
+        "concept": "Valid for uniform acceleration."
+      }
+    }
+  }
+}
