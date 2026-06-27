@@ -1,3 +1,7 @@
 streamlit
 groq
 sympy
+fastapi
+uvicorn
+openai
+python-dotenv
