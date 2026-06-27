@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -10,22 +10,20 @@ const SidebarIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="
 function App() {
   const [query, setQuery] = useState('');
   const [chatHistory, setChatHistory] = useState(() => JSON.parse(localStorage.getItem('chatHistory')) || []);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [stars, setStars] = useState([]);
-
-  useEffect(() => {
-    setStars(Array.from({ length: 50 }).map(() => ({ 
-      top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, size: `${Math.random() * 2 + 1}px` 
-    })));
-  }, []);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+  const [isTyping, setIsTyping] = useState(false);
+  const textareaRef = useRef(null);
 
   useEffect(() => { localStorage.setItem('chatHistory', JSON.stringify(chatHistory)); }, [chatHistory]);
 
   const handleSearch = async () => {
     if (!query.trim()) return;
+    setIsTyping(true);
     const userMsg = query;
     setChatHistory(prev => [...prev, { type: 'user', text: userMsg }]);
     setQuery('');
+    textareaRef.current.style.height = 'auto';
+    
     try {
       const res = await fetch('https://physics-ai-engine.onrender.com/stream-ask', {
         method: 'POST',
@@ -35,39 +33,37 @@ function App() {
       const data = await res.text();
       setChatHistory(prev => [...prev, { type: 'ai', text: data }]);
     } catch { setChatHistory(prev => [...prev, { type: 'ai', text: "Error: Server unreachable." }]); }
+    finally { setIsTyping(false); }
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#000', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-      {/* Stars Background */}
-      {stars.map((s, i) => <div key={i} style={{ position: 'absolute', top: s.top, left: s.left, width: s.size, height: s.size, background: 'white', borderRadius: '50%', zIndex: 0 }} />)}
-
-      {/* Sidebar */}
-      <div style={{ width: sidebarOpen ? '260px' : '0px', transition: '0.3s', background: 'rgba(20,20,20,0.9)', borderRight: '1px solid #333', zIndex: 10, padding: sidebarOpen ? '20px' : '0', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', height: '100vh', background: '#000', color: '#fff', overflow: 'hidden' }}>
+      {/* Sidebar Overlay for Mobile */}
+      <div style={{ width: sidebarOpen ? '260px' : '0px', transition: '0.3s', background: '#111', zIndex: 100, borderRight: '1px solid #333', padding: sidebarOpen ? '20px' : '0', overflow: 'hidden', position: window.innerWidth < 768 ? 'absolute' : 'relative' }}>
         <h2 style={{ fontSize: '18px', marginBottom: '20px' }}>Recent Chats</h2>
         <button onClick={() => setChatHistory([])} style={{ background: '#333', color: '#fff', border: 'none', padding: '8px', borderRadius: '5px', width: '100%' }}>Clear History</button>
       </div>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', zIndex: 2 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
         <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'none', border: 'none', color: '#fff', margin: '20px', cursor: 'pointer', width: 'fit-content' }}><SidebarIcon /></button>
         
         <div style={{ flex: 1, overflowY: 'auto', padding: '0 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {chatHistory.length === 0 && <h1 style={{ marginTop: '20vh' }}>Let's crack JEE together!</h1>}
           {chatHistory.map((msg, i) => (
-            <div key={i} style={{ width: '100%', maxWidth: '800px', margin: '10px 0', textAlign: msg.type === 'user' ? 'right' : 'left' }}>
-              <div style={{ padding: '15px', borderRadius: '15px', background: msg.type === 'user' ? '#252525' : 'transparent', display: 'inline-block', textAlign: 'left' }}>
+            <div key={i} style={{ width: '100%', maxWidth: '800px', margin: '15px 0', textAlign: msg.type === 'user' ? 'right' : 'left' }}>
+              <div style={{ padding: '15px', borderRadius: '15px', background: msg.type === 'user' ? '#252525' : 'transparent', display: 'inline-block', textAlign: 'left', maxWidth: '90%' }}>
                 <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{msg.text}</ReactMarkdown>
               </div>
             </div>
           ))}
+          {isTyping && <div style={{ color: '#666', padding: '20px' }}>Acurithm is thinking ✧.*</div>}
         </div>
 
-        {/* Input */}
         <div style={{ padding: '20px', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: '100%', maxWidth: '800px', display: 'flex', background: '#1a1a1a', borderRadius: '30px', padding: '10px' }}>
-            <input value={query} onChange={(e) => setQuery(e.target.value)} style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', padding: '10px', outline: 'none' }} placeholder="Ask Acurithm..." />
-            <button onClick={handleSearch} style={{ background: '#fff', border: 'none', borderRadius: '50%', padding: '10px', cursor: 'pointer' }}><SendIcon /></button>
+          <div style={{ width: '100%', maxWidth: '800px', display: 'flex', alignItems: 'flex-end', background: '#1a1a1a', borderRadius: '25px', padding: '10px 20px' }}>
+            <textarea ref={textareaRef} value={query} onChange={(e) => { setQuery(e.target.value); e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }} 
+              style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', padding: '10px 0', outline: 'none', resize: 'none', maxHeight: '150px' }} placeholder="Ask Acurithm..." />
+            <button onClick={handleSearch} style={{ background: '#fff', border: 'none', borderRadius: '50%', padding: '10px', cursor: 'pointer', marginLeft: '10px' }}><SendIcon /></button>
           </div>
         </div>
       </div>
