@@ -1,11 +1,14 @@
 import streamlit as st
-import os
-from main import get_ai_order, execute_tool
+from main import solve_physics_question # Naya function import karo
 
-st.title("🚀 Acurithm: Physics Engine")
+st.title("🚀 Acurithm: High Precision Engine")
+user_input = st.text_input("Physics ka sawal:")
 
-question = st.text_input("Physics ka sawal:")
 if st.button("Solve"):
-    order = get_ai_order(question)
-    result = execute_tool(order['tool'], order['params'])
-    st.success(result)
+    if user_input:
+        with st.spinner('Solving with high precision...'):
+            # Naye function ko call karo
+            result = solve_physics_question(user_input)
+            st.write(result)
+    else:
+        st.warning("Please enter a question!")
