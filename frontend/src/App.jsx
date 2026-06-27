@@ -6,279 +6,66 @@ import 'katex/dist/katex.min.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-// --- PREMIUM SVG ICONS ---
-const AttachmentIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-  </svg>
+// Icons
+const SendIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>;
+const SidebarToggleIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>;
+const AtomIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle></svg>;
+
+const AIResponseText = ({ text }) => (
+  <div style={{ color: '#e0e0e0', fontSize: '16px', lineHeight: '1.6' }}>
+    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{text}</ReactMarkdown>
+  </div>
 );
-
-const MicIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-    <line x1="12" y1="19" x2="12" y2="22"></line>
-  </svg>
-);
-
-const SendIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="19" x2="12" y2="5"></line>
-    <polyline points="5 12 12 5 19 12"></polyline>
-  </svg>
-);
-
-const ChatBubbleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-  </svg>
-);
-
-const SidebarToggleIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-    <line x1="9" y1="3" x2="9" y2="21"></line>
-  </svg>
-);
-
-const AtomIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
-const CodeIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>;
-const MathIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f472b6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19.5 9.5 12 17l-7.5-7.5"></path><path d="M12 2v14"></path><path d="M22 22H2"></path></svg>;
-const PenIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>;
-
-const AIResponseText = ({ text, forceStop, onComplete, scrollTrigger }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const intervalRef = useRef(null);
-  const onCompleteRef = useRef(onComplete);
-
-  useEffect(() => {
-    onCompleteRef.current = onComplete;
-  }, [onComplete]);
-
-  const formattedText = text
-    .replace(/\\\(/g, '$')
-    .replace(/\\\)/g, '$')
-    .replace(/\\\[/g, '$$$')
-    .replace(/\\\]/g, '$$$');
-
-  useEffect(() => {
-    let i = 0;
-    setDisplayedText('');
-    setIsTyping(true);
-    intervalRef.current = setInterval(() => {
-      i += 4; 
-      setDisplayedText(formattedText.slice(0, i));
-      if (scrollTrigger) scrollTrigger();
-      if (i >= formattedText.length) {
-        clearInterval(intervalRef.current);
-        setDisplayedText(formattedText);
-        setIsTyping(false);
-        if (onCompleteRef.current) onCompleteRef.current();
-      }
-    }, 10); 
-    return () => clearInterval(intervalRef.current);
-  }, [formattedText]);
-
-  useEffect(() => {
-    if (forceStop && isTyping) {
-      clearInterval(intervalRef.current);
-      setIsTyping(false);
-    }
-  }, [forceStop, isTyping]);
-
-  return (
-    <div style={{ width: '100%' }}>
-      <div style={{ color: '#e0e0e0', fontSize: '18px', lineHeight: '1.8', letterSpacing: '0.4px', width: '100%' }}>
-        <ReactMarkdown 
-          remarkPlugins={[remarkMath]} 
-          rehypePlugins={[[rehypeKatex, { strict: false }]]}
-          components={{
-            p: ({node, ...props}) => <p style={{ margin: '0 0 18px 0' }} {...props} />,
-            code({node, inline, className, children, ...props}) {
-              const match = /language-(\w+)/.exec(className || '')
-              return !inline && match ? (
-                <div style={{ borderRadius: '8px', overflow: 'hidden', margin: '15px 0', border: '1px solid #333' }}>
-                  <div style={{ background: '#1e1e1e', padding: '8px 15px', fontSize: '14px', color: '#888', borderBottom: '1px solid #333' }}><span>{match[1]}</span></div>
-                  <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" customStyle={{ margin: 0, padding: '15px', fontSize: '16px' }} {...props}>{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
-                </div>
-              ) : <code style={{ background: '#333', padding: '4px 8px', borderRadius: '6px', color: '#ff9800', fontFamily: 'monospace' }} {...props}>{children}</code>
-            }
-          }}
-        >{displayedText}</ReactMarkdown>
-        {isTyping && <span style={{ display: 'inline-block', width: '10px', height: '20px', background: '#3b82f6', marginLeft: '6px', verticalAlign: 'middle', animation: 'cursorBlink 0.8s infinite' }} />}
-      </div>
-    </div>
-  );
-};
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [greeting, setGreeting] = useState('');
   const [query, setQuery] = useState('');
-  const [chatHistory, setChatHistory] = useState([]); 
-  const [isChatStarted, setIsChatStarted] = useState(false); 
-  const [isFetching, setIsFetching] = useState(false); 
-  const [isGenerating, setIsGenerating] = useState(false); 
-  const [forceStopTyping, setForceStopTyping] = useState(false);
-  const abortControllerRef = useRef(null); 
-  const textareaRef = useRef(null);
-  const chatContainerRef = useRef(null); 
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isChatStarted, setIsChatStarted] = useState(false);
 
-  const greetings = ["Ask away, I'm ready!", "Ready to solve JEE problems?", "How can I help you today?", "Let's crack JEE together!"];
-  const promptSuggestions = [
-    { icon: <AtomIcon />, text: 'Explain Quantum Physics simply' },
-    { icon: <CodeIcon />, text: 'Write a React Login Component' },
-    { icon: <MathIcon />, text: 'Solve a tough Calculus integration' },
-    { icon: <PenIcon />, text: 'Draft a professional email' }
-  ];
-
-  const scrollToBottom = () => { if (chatContainerRef.current) chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight; };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsSidebarOpen(true), 1500);
-    setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleNewChat = () => { setChatHistory([]); setIsChatStarted(false); setQuery(''); };
-
-  const handleSearch = async (overrideQuery = null) => {
-    const finalQuery = overrideQuery || query;
-    if (!finalQuery.trim()) return;
-    if (finalQuery.trim().toLowerCase() === 'clear') { handleNewChat(); return; }
-    
-    setIsChatStarted(true); 
-    setChatHistory(prev => [...prev, { type: 'user', text: finalQuery }]);
-    setQuery(''); 
-    setIsFetching(true); setIsGenerating(true); setForceStopTyping(false); 
-    
-    abortControllerRef.current = new AbortController();
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+    setIsChatStarted(true);
+    setChatHistory(prev => [...prev, { type: 'user', text: query }]);
+    const currentQuery = query;
+    setQuery('');
     try {
       const res = await fetch('https://physics-ai-engine.onrender.com/stream-ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: finalQuery }),
-        signal: abortControllerRef.current.signal
+        body: JSON.stringify({ question: currentQuery }),
       });
       const data = await res.text();
-      setIsFetching(false); 
       setChatHistory(prev => [...prev, { type: 'ai', text: data }]);
     } catch (err) {
-      setIsFetching(false); setIsGenerating(false);
       setChatHistory(prev => [...prev, { type: 'ai', text: "Error: Backend unreachable." }]);
     }
   };
 
   return (
     <>
-      {/* 🚀 GLOBAL STYLES INJECTED HERE TO FIX NETLIFY UI BUG */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-          font-family: 'Inter', sans-serif;
-        }
-        
-        body, html {
-          background-color: #000;
-          color: #fff;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-
-        .suggest-chip {
-          transition: all 0.2s ease-in-out;
-        }
-        
-        .suggest-chip:hover {
-          background: rgba(255, 255, 255, 0.1) !important;
-          transform: translateY(-2px);
-        }
-
-        textarea::placeholder {
-          color: #666;
-        }
-
-        /* Beautiful Scrollbar for Chat */
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #333;
-          border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #555;
-        }
-
-        @keyframes cursorBlink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
+        body { background: #000; color: #fff; margin: 0; font-family: 'Inter', sans-serif; }
+        .chat-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .input-area { position: fixed; bottom: 20px; width: 100%; max-width: 800px; left: 50%; transform: translateX(-50%); background: #1a1a1a; padding: 15px; border-radius: 20px; display: flex; }
       `}</style>
-
-      <div style={{ display: 'flex', height: '100vh', width: '100%', background: '#000', overflow: 'hidden' }}>
-        <div style={{ width: isSidebarOpen ? '320px' : '0px', background: '#111', transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden', borderRight: '1px solid #333', display: 'flex', flexDirection: 'column', zIndex: 20 }}>
-          <div style={{ padding: '25px', width: '320px' }}>
-            <button onClick={handleNewChat} style={{ width: '100%', padding: '14px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '12px', color: '#fff', cursor: 'pointer', fontWeight: '500', fontSize: '15px' }}>+ New Chat</button>
-          </div>
-        </div>
-        
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: isChatStarted ? 'flex-start' : 'center', position: 'relative' }}>
-          {!isSidebarOpen && <button onClick={() => setIsSidebarOpen(true)} style={{ position: 'absolute', top: '25px', left: '25px', background: 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SidebarToggleIcon /></button>}
-          
-          <div ref={chatContainerRef} style={{ width: '100%', maxWidth: '900px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-            {!isChatStarted ? (
-              <div style={{ textAlign: 'center', margin: 'auto', width: '100%' }}>
-                <h1 style={{ background: 'linear-gradient(90deg, #60a5fa, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '3.5rem', fontWeight: '700', marginBottom: '40px' }}>{greeting}</h1>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', padding: '0 20px', maxWidth: '800px', margin: '0 auto' }}>
-                  {promptSuggestions.map((s, i) => (
-                    <div key={i} onClick={() => handleSearch(s.text)} className="suggest-chip" style={{ padding: '16px', borderRadius: '16px', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)', fontSize: '15px', fontWeight: '500' }}>
-                      {s.icon} {s.text}
-                    </div>
-                  ))}
-                </div>
+      
+      <div style={{ padding: '20px' }}>
+        {!isChatStarted && <h1 style={{ textAlign: 'center', marginTop: '100px' }}>Let's crack JEE together!</h1>}
+        <div className="chat-container">
+          {chatHistory.map((msg, i) => (
+            <div key={i} style={{ margin: '20px 0', textAlign: msg.type === 'user' ? 'right' : 'left' }}>
+              <div style={{ padding: '10px 15px', borderRadius: '10px', background: msg.type === 'user' ? '#333' : 'transparent', display: 'inline-block' }}>
+                {msg.type === 'user' ? msg.text : <AIResponseText text={msg.text} />}
               </div>
-            ) : (
-              <div style={{ paddingBottom: '40px' }}>
-                {chatHistory.map((msg, i) => (
-                  <div key={i} style={{ padding: '20px 0', display: 'flex', justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start', width: '100%' }}>
-                    <div style={{ display: 'inline-block', padding: '18px 24px', background: msg.type === 'user' ? '#252525' : 'transparent', borderRadius: msg.type === 'user' ? '24px 24px 4px 24px' : '8px', color: '#fff', textAlign: 'left', maxWidth: '85%', fontSize: '16px' }}>
-                      {msg.type === 'user' ? msg.text : <AIResponseText text={msg.text} scrollTrigger={scrollToBottom} />}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          
-          <div style={{ width: '100%', maxWidth: '900px', padding: '20px', background: 'linear-gradient(180deg, transparent, #000 30%)' }}>
-            <div className="search-bar-container" style={{ background: '#252525', borderRadius: '30px', padding: '10px 15px 10px 25px', display: 'flex', alignItems: 'center', gap: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-              <textarea 
-                ref={textareaRef} 
-                value={query} 
-                onChange={(e) => setQuery(e.target.value)} 
-                onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSearch(); } }}
-                placeholder="Ask Acurithm..." 
-                style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: '16px', resize: 'none', outline: 'none', height: '24px', lineHeight: '24px', paddingTop: '2px' }} 
-              />
-              <button onClick={() => handleSearch()} style={{ background: query.trim() ? '#fff' : '#444', color: query.trim() ? '#000' : '#888', borderRadius: '50%', width: '40px', height: '40px', border: 'none', cursor: query.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-                <SendIcon />
-              </button>
             </div>
-          </div>
+          ))}
+        </div>
+        <div className="input-area">
+          <textarea value={query} onChange={(e) => setQuery(e.target.value)} style={{ flex: 1, background: 'transparent', color: '#fff', border: 'none', outline: 'none' }} placeholder="Ask Acurithm..." />
+          <button onClick={handleSearch} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}><SendIcon /></button>
         </div>
       </div>
     </>
   );
 }
-
 export default App;

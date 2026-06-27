@@ -14,7 +14,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-class ChatRequest(BaseModel):
+class ChatRequest(BaseModel):   
     question: str
 
 @app.post("/stream-ask")
