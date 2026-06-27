@@ -1,5 +1,4 @@
 import os
-import sympy
 from groq import Groq
 
 # Groq Client Setup
@@ -7,7 +6,8 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 def solve_physics_question(question):
     """
-    Analyzes question via AI and returns precise solution.
+    Analyzes question via AI and returns precise solution using 
+    the latest llama-3.3-70b-versatile model.
     """
     prompt = f"""
     You are a professional Physics tutor for JEE Advanced. 
@@ -26,7 +26,7 @@ def solve_physics_question(question):
                 {"role": "system", "content": "You are a precise, logical physics expert."},
                 {"role": "user", "content": prompt}
             ],
-            model="llama3-70b-8192",
+            model="llama-3.3-70b-versatile",
         )
         return chat_completion.choices[0].message.content
     except Exception as e:
