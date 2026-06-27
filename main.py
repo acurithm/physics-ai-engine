@@ -7,14 +7,13 @@ from groq import Groq
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 def solve_physics_question(question):
-    # Prompt mein double-backslash force kiya hai taaki LaTeX render ho
     prompt = f"""
     You are a professional JEE Physics Expert.
     1. Use Knowledge Base: {json.dumps(get_context_from_db())}.
     2. FORMATTING RULES (CRITICAL): 
        - Use double backslashes for all LaTeX (e.g., \\frac, \\theta, \\lambda, \\Delta).
        - Wrap inline math in $...$ and block equations in $$...$$.
-       - NEVER use single slashes '/' for math, always use \\frac{{a}}{{b}}.
+       - NEVER use single slashes '/' for math.
     3. Structure: Step-by-step logic, Formula citing, Final Result.
     
     Question: {question}
@@ -32,9 +31,9 @@ def get_context_from_db():
     except:
         return {}
 
-# UI
+# UI - Unique key add kar di hai error fix karne ke liye
 st.title("🚀 Acurithm: High Precision Engine")
-user_input = st.text_input("JEE Advanced Level Physics ka sawal:")
+user_input = st.text_input("JEE Advanced Level Physics ka sawal:", key="physics_unique_key")
 
 if st.button("Solve"):
     if user_input:

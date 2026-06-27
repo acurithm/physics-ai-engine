@@ -20,7 +20,7 @@ def extract_to_db(pdf_path):
 
     prompt = f"""
     Convert this JEE syllabus into strict JSON.
-    FORMATTING RULES (CRITICAL):
+    FORMATTING RULES:
     - Use double backslashes for LaTeX (e.g., \\frac, \\theta, \\lambda).
     - Format: {{"physics": {{"chapter_name": {{"concept": "...", "formula": "...", "source": "NTA"}}}}}}
     Text: {text[:3000]}
