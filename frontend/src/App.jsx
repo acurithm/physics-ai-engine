@@ -45,13 +45,10 @@ const AtomIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="non
 const CodeIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>;
 const MathIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f472b6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19.5 9.5 12 17l-7.5-7.5"></path><path d="M12 2v14"></path><path d="M22 22H2"></path></svg>;
 const PenIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>;
-const UserAvatarIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>;
-const SettingsIcon = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
 
 const AIResponseText = ({ text, forceStop, onComplete, scrollTrigger }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
-  const [copied, setCopied] = useState(false);
   const intervalRef = useRef(null);
   const onCompleteRef = useRef(onComplete);
 
@@ -92,7 +89,7 @@ const AIResponseText = ({ text, forceStop, onComplete, scrollTrigger }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ color: '#e0e0e0', fontSize: '20px', lineHeight: '1.9', letterSpacing: '0.4px', fontFamily: "'Inter', sans-serif", width: '100%' }}>
+      <div style={{ color: '#e0e0e0', fontSize: '18px', lineHeight: '1.8', letterSpacing: '0.4px', width: '100%' }}>
         <ReactMarkdown 
           remarkPlugins={[remarkMath]} 
           rehypePlugins={[[rehypeKatex, { strict: false }]]}
@@ -109,7 +106,7 @@ const AIResponseText = ({ text, forceStop, onComplete, scrollTrigger }) => {
             }
           }}
         >{displayedText}</ReactMarkdown>
-        {isTyping && <span style={{ display: 'inline-block', width: '10px', height: '22px', background: '#3b82f6', marginLeft: '6px', verticalAlign: 'middle', animation: 'cursorBlink 0.8s infinite' }} />}
+        {isTyping && <span style={{ display: 'inline-block', width: '10px', height: '20px', background: '#3b82f6', marginLeft: '6px', verticalAlign: 'middle', animation: 'cursorBlink 0.8s infinite' }} />}
       </div>
     </div>
   );
@@ -117,7 +114,6 @@ const AIResponseText = ({ text, forceStop, onComplete, scrollTrigger }) => {
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [stars, setStars] = useState([]);
   const [greeting, setGreeting] = useState('');
   const [query, setQuery] = useState('');
   const [chatHistory, setChatHistory] = useState([]); 
@@ -136,13 +132,11 @@ function App() {
     { icon: <MathIcon />, text: 'Solve a tough Calculus integration' },
     { icon: <PenIcon />, text: 'Draft a professional email' }
   ];
-  const recentChats = ["Thermodynamics Basics", "React Hooks UseEffect", "JEE Main 2026 Strategy", "Python API Integration"];
 
   const scrollToBottom = () => { if (chatContainerRef.current) chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight; };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsSidebarOpen(true), 1500);
-    setStars(Array.from({ length: 60 }).map(() => ({ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, size: `${Math.random() * 2 + 1}px`, duration: `${Math.random() * 3 + 2}s` })));
     setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
     return () => clearTimeout(timer);
   }, []);
@@ -161,7 +155,6 @@ function App() {
     
     abortControllerRef.current = new AbortController();
     try {
-      // 🔥 LIVE RENDER URL
       const res = await fetch('https://physics-ai-engine.onrender.com/stream-ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -178,41 +171,114 @@ function App() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100%', background: '#000', overflow: 'hidden' }}>
-      <div style={{ width: isSidebarOpen ? '320px' : '0px', background: '#111', transition: 'width 0.4s', overflow: 'hidden', borderRight: '1px solid #333', display: 'flex', flexDirection: 'column', zIndex: 20 }}>
-        <div style={{ padding: '25px' }}>
-          <button onClick={handleNewChat} style={{ width: '100%', padding: '14px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '12px', color: '#fff', cursor: 'pointer' }}>+ New Chat</button>
-        </div>
-      </div>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: isChatStarted ? 'space-between' : 'center' }}>
-        {!isSidebarOpen && <button onClick={() => setIsSidebarOpen(true)} style={{ position: 'absolute', top: '30px', left: '30px', background: 'transparent', border: 'none', cursor: 'pointer', color: '#aaa' }}><SidebarToggleIcon /></button>}
+    <>
+      {/* 🚀 GLOBAL STYLES INJECTED HERE TO FIX NETLIFY UI BUG */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
-        <div ref={chatContainerRef} style={{ width: '100%', maxWidth: '1200px', flex: 1, overflowY: 'auto' }}>
-          {!isChatStarted && (
-            <div style={{ textAlign: 'center', paddingTop: '100px' }}>
-              <h1 style={{ background: 'linear-gradient(90deg, #60a5fa, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '3.8rem' }}>{greeting}</h1>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '15px', padding: '20px' }}>
-                {promptSuggestions.map((s, i) => <div key={i} onClick={() => handleSearch(s.text)} className="suggest-chip" style={{ padding: '16px', borderRadius: '16px', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)' }}>{s.icon} {s.text}</div>)}
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Inter', sans-serif;
+        }
+        
+        body, html {
+          background-color: #000;
+          color: #fff;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+
+        .suggest-chip {
+          transition: all 0.2s ease-in-out;
+        }
+        
+        .suggest-chip:hover {
+          background: rgba(255, 255, 255, 0.1) !important;
+          transform: translateY(-2px);
+        }
+
+        textarea::placeholder {
+          color: #666;
+        }
+
+        /* Beautiful Scrollbar for Chat */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #333;
+          border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
+
+        @keyframes cursorBlink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
+
+      <div style={{ display: 'flex', height: '100vh', width: '100%', background: '#000', overflow: 'hidden' }}>
+        <div style={{ width: isSidebarOpen ? '320px' : '0px', background: '#111', transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden', borderRight: '1px solid #333', display: 'flex', flexDirection: 'column', zIndex: 20 }}>
+          <div style={{ padding: '25px', width: '320px' }}>
+            <button onClick={handleNewChat} style={{ width: '100%', padding: '14px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid #3b82f6', borderRadius: '12px', color: '#fff', cursor: 'pointer', fontWeight: '500', fontSize: '15px' }}>+ New Chat</button>
+          </div>
+        </div>
+        
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: isChatStarted ? 'flex-start' : 'center', position: 'relative' }}>
+          {!isSidebarOpen && <button onClick={() => setIsSidebarOpen(true)} style={{ position: 'absolute', top: '25px', left: '25px', background: 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '8px', border: 'none', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SidebarToggleIcon /></button>}
+          
+          <div ref={chatContainerRef} style={{ width: '100%', maxWidth: '900px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+            {!isChatStarted ? (
+              <div style={{ textAlign: 'center', margin: 'auto', width: '100%' }}>
+                <h1 style={{ background: 'linear-gradient(90deg, #60a5fa, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '3.5rem', fontWeight: '700', marginBottom: '40px' }}>{greeting}</h1>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', padding: '0 20px', maxWidth: '800px', margin: '0 auto' }}>
+                  {promptSuggestions.map((s, i) => (
+                    <div key={i} onClick={() => handleSearch(s.text)} className="suggest-chip" style={{ padding: '16px', borderRadius: '16px', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.05)', fontSize: '15px', fontWeight: '500' }}>
+                      {s.icon} {s.text}
+                    </div>
+                  ))}
+                </div>
               </div>
+            ) : (
+              <div style={{ paddingBottom: '40px' }}>
+                {chatHistory.map((msg, i) => (
+                  <div key={i} style={{ padding: '20px 0', display: 'flex', justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start', width: '100%' }}>
+                    <div style={{ display: 'inline-block', padding: '18px 24px', background: msg.type === 'user' ? '#252525' : 'transparent', borderRadius: msg.type === 'user' ? '24px 24px 4px 24px' : '8px', color: '#fff', textAlign: 'left', maxWidth: '85%', fontSize: '16px' }}>
+                      {msg.type === 'user' ? msg.text : <AIResponseText text={msg.text} scrollTrigger={scrollToBottom} />}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div style={{ width: '100%', maxWidth: '900px', padding: '20px', background: 'linear-gradient(180deg, transparent, #000 30%)' }}>
+            <div className="search-bar-container" style={{ background: '#252525', borderRadius: '30px', padding: '10px 15px 10px 25px', display: 'flex', alignItems: 'center', gap: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+              <textarea 
+                ref={textareaRef} 
+                value={query} 
+                onChange={(e) => setQuery(e.target.value)} 
+                onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSearch(); } }}
+                placeholder="Ask Acurithm..." 
+                style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: '16px', resize: 'none', outline: 'none', height: '24px', lineHeight: '24px', paddingTop: '2px' }} 
+              />
+              <button onClick={() => handleSearch()} style={{ background: query.trim() ? '#fff' : '#444', color: query.trim() ? '#000' : '#888', borderRadius: '50%', width: '40px', height: '40px', border: 'none', cursor: query.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                <SendIcon />
+              </button>
             </div>
-          )}
-          {isChatStarted && chatHistory.map((msg, i) => (
-             <div key={i} style={{ padding: '20px', textAlign: msg.type === 'user' ? 'right' : 'left' }}>
-               <div style={{ display: 'inline-block', padding: '15px', background: msg.type === 'user' ? '#252525' : 'transparent', borderRadius: '20px', color: '#fff', textAlign: 'left', maxWidth: '80%' }}>
-                 {msg.type === 'user' ? msg.text : <AIResponseText text={msg.text} scrollTrigger={scrollToBottom} />}
-               </div>
-             </div>
-          ))}
-        </div>
-        
-        <div style={{ width: '90%', maxWidth: '950px', padding: '20px' }}>
-          <div className="search-bar-container" style={{ background: 'rgba(37, 37, 37, 0.65)', borderRadius: '40px', padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(16px)' }}>
-            <textarea ref={textareaRef} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Ask Acurithm..." style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: '18px', resize: 'none', outline: 'none' }} />
-            <button onClick={() => handleSearch()} style={{ background: '#e5e5e5', borderRadius: '50%', width: '45px', height: '45px', border: 'none', cursor: 'pointer' }}><SendIcon /></button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
+
 export default App;
