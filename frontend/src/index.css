@@ -1,32 +1,48 @@
-/* Update these in index.css */
-
-.sidebar-wrapper {
-  padding-top: 60px; /* Sidebar toggle icon ke liye jagah banayi */
+:root {
+  --bg-color: #131314;
+  --surface-color: #1e1e1f;
+  --text-primary: #e3e3e3;
+  --text-secondary: #a8c7fa;
+  --accent-color: #8ab4f8;
 }
 
-.recent-header {
-  padding: 10px 20px;
-  color: #888;
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Google Sans', 'Inter', sans-serif; }
+
+body { background-color: var(--bg-color); color: var(--text-primary); height: 100vh; overflow: hidden; }
+
+/* Sidebar */
+.sidebar {
+  background: #111;
+  width: 260px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  padding: 16px;
+  transition: all 0.3s ease;
+  height: 100vh;
 }
 
-/* Suggestion Card Hover Effect */
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+/* Prompt Cards */
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+}
+
 .suggestion-card {
-  transition: all 0.2s ease;
-}
-
-.suggestion-card:hover {
-  background: #252525 !important;
-  border-color: #555 !important;
-}
-
-/* Sidebar Toggle Icon Positioning */
-.toggle-btn {
-  position: absolute;
-  top: 15px;
-  left: 20px;
-  z-index: 1000;
+  background: var(--surface-color);
+  border: 1px solid #333;
+  padding: 16px;
+  border-radius: 12px;
   cursor: pointer;
+  color: var(--text-primary);
+  text-align: left;
+  transition: background 0.2s;
 }
+
+.suggestion-card:hover { background: #282829; }
