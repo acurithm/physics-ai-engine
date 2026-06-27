@@ -1,62 +1,35 @@
 import os
-import json
-import streamlit as st
+import uvicorn
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from groq import Groq
+from dotenv import load_dotenv
 
-# API key secure setup
+load_dotenv()
+app = FastAPI()
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-def solve_physics_question(question):
-    prompt = f"""
-    You are a professional JEE Physics Expert.
-    1. Use Knowledge Base: {json.dumps(get_context_from_db())}.
-    2. FORMATTING RULES (CRITICAL): 
-       - Use double backslashes for all LaTeX (e.g., \\frac, \\theta, \\lambda, \\Delta).
-       - Wrap inline math in $...$ and block equations in $$...$$.
-    3. Structure: Step-by-step logic, Formula citing, Final Result.
-    
-    Question: {question}
-    """
-    chat_completion = client.chat.completions.create(
-        messages=[{"role": "user", "content": prompt}],
+class ChatRequest(BaseModel):
+    question: str
+
+@app.post("/stream-ask")
+async def stream_ask(req: ChatRequest):
+    completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": req.question}],
+        stream=True
     )
-    return chat_completion.choices[0].message.content
+    def generate():
+        for chunk in completion:
+            content = chunk.choices[0].delta.content
+            if content:
+                yield content
+    return StreamingResponse(generate(), media_type="text/event-stream")
 
-def get_context_from_db():
-    try:
-        with open('physics_db.json', 'r') as f:
-            return json.load(f)
-    except:
-        return {}
-
-# UI - Title and Input
-st.title("🚀 Acurithm: High Precision Engine")
-user_input = st.text_input("JEE Advanced Level Physics ka sawal:", key="physics_unique_key")
-
-# Feedback state initialize karo
-if 'feedback_given' not in st.session_state:
-    st.session_state.feedback_given = False
-
-if st.button("Solve"):
-    if user_input:
-        with st.spinner("Calculating precision..."):
-            answer = solve_physics_question(user_input)
-            st.markdown(answer)
-            # Answer milne ke baad flag set karo
-            st.session_state.feedback_given = True
-            st.session_state.last_answer = answer
-    else:
-        st.warning("Please enter a question!")
-
-# Feedback Section
-if st.session_state.feedback_given:
-    st.write("---")
-    st.write("💡 **Kya ye jawab helpful tha?**")
-    col1, col2 = st.columns(2)
-    
-    if col1.button("👍 Haan"):
-        st.success("Feedback recorded! Engine upgrade ho raha hai.")
-    
-    if col2.button("👎 Nahi"):
-        st.warning("Sorry! Isse improve karne ke liye data update karna padega.")
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
